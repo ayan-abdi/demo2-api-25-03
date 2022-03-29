@@ -5,7 +5,10 @@ module.exports = (sequelize) => {
     const category = sequelize.define('category', {
         name: {
             type: DataTypes.STRING(50),
-            allowNull: false
+            allowNull: false,
+            unique: {
+            }   
+           
         }
 
     }, {
