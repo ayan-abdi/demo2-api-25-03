@@ -1,25 +1,30 @@
-// class ErrorResponse {
+class ErrorResponse {
 
-//     constructor(message, status = 200) {
-//         this.message = message;
-//         this.status = status;
-//     }
-// };
-// class NotFoundErrorResponse extends ErrorResponse {
+    constructor(message, status = 200) {
+        this.status = status;
+        this.message = message;
+    }
+};
+class NotFoundErrorResponse extends ErrorResponse {
 
-//     constructor(message) {
-//         super(message)
-//     }
-// };
+    constructor(message) {
+        super(message, 404);
+    };
+};
 
-// class InvalidErrorResponse extends ErrorResponse {
+class InvalidErrorResponse extends ErrorResponse {
 
-//     constructor(message) ///code pas fini!!!!!!!
-// };
+    constructor(message, fieldErrors, status = 422) {
+
+        super(message, status); 
+        this.fieldErrors = fieldErrors;
+    }
+}
 
 
 
-// module.exports = {
-//      ErrorResponse,
-//      NotFoundErrorResponse
-//  };
+module.exports = {
+     ErrorResponse,
+     NotFoundErrorResponse,
+     InvalidErrorResponse
+ };

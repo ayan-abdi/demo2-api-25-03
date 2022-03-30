@@ -1,4 +1,4 @@
-const Sequelize = require('sequelize');
+const { Sequelize } = require('sequelize');
 // Sequelize Initialization
 const sequelize = new Sequelize(
     process.env.DB_DATABASE,
@@ -16,28 +16,46 @@ const sequelize = new Sequelize(
         }
         
     }
-
-);
-
-// Create object DB
-const db = {}; //On ajoutera le contenu de notre table 
-
-// Add instance of sequelize
-db.sequelize = sequelize;
-
-// Add models
-db.category = require('./category')(sequelize);
-db.subject = require('./subject')(sequelize);
-db.message = require('./message')(sequelize);
-db.categorySubject = require('./categorySubject')(sequelize);
+    
+    );
+    
+    // Create object DB
+    const db = {}; //On ajoutera le contenu de notre table 
+    
+    // Add instance of sequelize
+    db.sequelize = sequelize;
+    
+    // Add models
+    db.category = require('./category')(sequelize);
+    db.subject = require('./subject')(sequelize);
+    db.message = require('./message')(sequelize);
+    db.categorySubject = require('./categorySubject')(sequelize);
+    db.member = require('./member')(sequelize);
 
 // Add Association ici on determine le type de liaison etre les tables
-db.subject.hasMany(db.message, { onDelete: 'NO ACTION', onUpdate: 'CASCADE'});  // subject a 0-n message
-db.message.belongsTo(db.category);  //message appartient qu'a seulement 1e seule categorie
+// [ONE to Many] Message -subject
+db.subject.hasMany(db.message, { onDelete: 'NO ACTION', onUpdate: 'CASCADE', foreignKey: { allowNull: false }});  // subject a 0-n message
+db.message.belongsTo(db.subject);  //message appartient qu'a seulement 1e seule categorie
 
 // [Many to Many]
 db.subject.belongsToMany(db.category, { through: db.categorySubject });
 db.category.belongsToMany(db.subject, { through: db.categorySubject });
+// [ONE TO MANY] subject-Member
+db.member.hasMany(db.subject, { 
+    onDelete: 'NO ACTION', onUpdate: 'CASCADE', 
+
+    foreignKey: {allowNull: false } });  // subject a 0-n messageµ
+db.subject.belongsTo(db.member);
+// [ONE TO MANY] message-member
+db.member.hasMany(db.message, { 
+    onDelete: 'NO ACTION', onUpdate: 'CASCADE', 
+    
+    foreignKey: {allowNull: false } });  // subject a 0-n messageµ
+db.message.belongsTo(db.member);
+
+
+
+
 
 // Export object DB
 module.exports = db;

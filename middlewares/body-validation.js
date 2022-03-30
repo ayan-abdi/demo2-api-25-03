@@ -1,5 +1,5 @@
 const { Request, Response, NextFunction } = require('express'); 
-const { InvalidConnectionError } = require('sequelize/types');
+const { InvalidConnectionError } = require('sequelize');
 const { BaseSchema } = require('yup');
 /**
  * 

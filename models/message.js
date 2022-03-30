@@ -5,9 +5,15 @@ module.exports = (sequelize) => {
 
     // initialize model Message
     const message = sequelize.define('message', {
+        // clef primaire
+        // id: {
+        //     type:DataTypes.BIGINT,
+        //     autoIncrement: true,
+        //     primarykey: true
+        // },
         content: {
-            type:DataTypes.STRING(1000),
-            allowNull: false
+            type: DataTypes.STRING(1000),
+            allowNull: false, 
         }
 
     }, {

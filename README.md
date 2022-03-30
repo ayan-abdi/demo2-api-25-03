@@ -16,6 +16,14 @@ orm: sequelize
 -morgan
 -dotenv-flow
 -cross-env
+-jsonwebtoken
 
 ### Dev Tools
 -nodemons
+
+
+### JWT_SECRET
+- aller sur node puis taper ceci: require('crypto').randomBytes(64).toString('hex')
+aller sur jwt.io
+-audience= cest celui qui recoit le token
+issuer est celui qui genere le token
