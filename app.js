@@ -26,13 +26,13 @@ db.sequelize.authenticate()
 if(NODE_ENV !== "production") {
     
     // cette ligne doit etre en commentaire car elle reactialise les modifications qui ne sont pas forcement definitive d'ou en commentaire avant de l'activer
-    db.sequelize.sync({ force: true});  /// la connection entre code et database et les droits accordés a sequelize
+    // db.sequelize.sync({ force: true});  /// la connection entre code et database et les droits accordés a sequelize
     // db.sequelize.sync({ force: true}); si on garde cette ligne sequelize drop tt a chaque fois que
 }
 // Add routing
 const router = require('./routes');
 
-app.use('/api/', router)
+app.use('/api', router)
 
 
 // Start WEB API

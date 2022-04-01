@@ -1,27 +1,43 @@
 const db = require('../models');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const generateJWT = require('../utils/jwt-utils');
+const { ErrorResponse } = require('../response-schema/error-schema');
+const { Op } = require('sequelize');
+
 
 const authController = {
     register: async (req, res) => {
+        //  // Recuperation des données
         const { pseudo, email } = req.validedData;
-        const password = bcrypt.hashSync(req.validedData.password, 15);
 
+         // Hashage du mot de passe à l'aide de "bcrypt"
+        const password = bcrypt.hashSync(req.validedData.password, 10);
+
+         // Création du compte en base de données
         const member = await db.member.create({ pseudo, email, password });
+        // Génération d'un « Json Web Token »
+        const token = await generateJWT({
+            id: member.id,
+            pseudo: member.pseudo,
+            isAdmin: member.isAdmin
+        });
+
+        // Envoi du token
         res.json(member);
     },
     login: async (req, res) => {
+         // Recuperation des données
         const { identifier, password } = req.validedData;
 
+        // Récuperation du compte "member" à l'aide du pseudo ou de l'email
         const member = await db.member.findOne({
-            where: {
+            where: {  // Condition avec un OU en SQL
                 [Op.or]: [
-                    {
-                        pseudo: { [op.like]: identifier }
+                    {   // Test du pseudo avec une egalité stricte (implicite)
+                        pseudo: { [Op.eq]: identifier.toLowerCase() }
                     },
                     {
-                        email: { [op.like]: identifier }
+                        email: { [Op.eq]: identifier.toLowerCase() }
                     }
                 ]
             
@@ -41,12 +57,14 @@ const authController = {
             return res.status(422).json(new ErrorResponse('Bad credential', 422));
         }
 
-        // FIXME Replace by JWT !!!!!!!!!!!
+        // Génération d'un « Json Web Token »
         const token = generateJWT({
             id: member.id,
             pseudo: member.pseudo,
+            isAdmin: member.isAdmin
 
-        })
+        });
+         // Envoi du token
         res.json(token);
     }
 };

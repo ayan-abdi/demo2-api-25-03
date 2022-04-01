@@ -1,5 +1,5 @@
 const { decodeJWT } = require('../utils/jwt-utils');
-const authentificateJWT = ()=> {
+const authentificateJwt = ()=> {
 
 /**
  * 
@@ -20,4 +20,4 @@ const authentificateJWT = ()=> {
  }
 
 }
-module.exports = authentificateJWT;
+module.exports = authentificateJwt;
